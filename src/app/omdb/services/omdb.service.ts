@@ -49,7 +49,6 @@ export interface MovieInfo {
   Production?: string;
   Website?: string;
   totalSeasons: number;
-  Response: string;
 }
 
 @Injectable({
