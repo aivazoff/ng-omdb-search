@@ -120,9 +120,12 @@
       "options": [
         "ban-keywords",
         "check-format",
-        "allow-pascal-case"
+        "allow-pascal-case",
+        "allow-leading-underscore"
       ]
     },
+
+    "no-trailing-whitespace": [true, "ignore-blank-lines"],
     "whitespace": {
       "options": [
         "check-branch",
