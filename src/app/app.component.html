@@ -5,7 +5,7 @@
 <div class="container py-5">
 
   <app-omdb-search
-    (beforeSarch)="loading = true"
+    (beforeSarch)="onBeforeSarch()"
     (search)="onSearch($event)"
     (clear)="onClear()"
   ></app-omdb-search>

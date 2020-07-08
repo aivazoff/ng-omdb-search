@@ -25,4 +25,9 @@ export class AppComponent implements OnInit {
   onClear(): void {
     this.movieInfo = null;
   }
+
+  onBeforeSarch(): void {
+    this.movieInfo = null;
+    this.loading = true;
+  }
 }
