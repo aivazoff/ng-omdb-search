@@ -21,4 +21,8 @@ export class AppComponent implements OnInit {
     this.movieInfo = movieInfo;
     this.loading = false;
   }
+
+  onClear(): void {
+    this.movieInfo = null;
+  }
 }

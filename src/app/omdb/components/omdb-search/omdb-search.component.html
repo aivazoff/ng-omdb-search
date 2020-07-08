@@ -3,11 +3,15 @@
 
     <mat-form-field>
       <mat-label>Search</mat-label>
-      <input matInput
+      <input type="search" matInput
              [matAutocomplete]="movies"
              [formControl]="searchControl"
              placeholder="Enter movie or TV-show title..."
              autocomplete="off">
+      <button mat-button *ngIf="searchControl.value" matSuffix mat-icon-button
+              aria-label="Clear" (click)="clearField()">
+        <mat-icon>close</mat-icon>
+      </button>
       <mat-autocomplete #movies="matAutocomplete"
                         [displayWith]="searchControlDisplayFn">
         <mat-option *ngFor="let it of searchResult$ | async"

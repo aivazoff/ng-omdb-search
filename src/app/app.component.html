@@ -3,9 +3,16 @@
 </mat-toolbar>
 
 <div class="container py-5">
-  <app-omdb-search (search)="onSearch($event)" (beforeSarch)="loading = true"></app-omdb-search>
+
+  <app-omdb-search
+    (beforeSarch)="loading = true"
+    (search)="onSearch($event)"
+    (clear)="onClear()"
+  ></app-omdb-search>
+
   <ng-container *ngIf="movieInfo">
     <app-omdb-movie-info [movieInfo]="movieInfo"></app-omdb-movie-info>
   </ng-container>
+
   <mat-spinner *ngIf="loading"></mat-spinner>
 </div>

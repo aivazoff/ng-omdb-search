@@ -13,6 +13,7 @@ export class OmdbSearchComponent implements OnInit {
 
   @Output() beforeSarch = new EventEmitter<void>();
   @Output() search = new EventEmitter<MovieInfo>();
+  @Output() clear = new EventEmitter<void>();
 
   searchControl = new FormControl('', [
     Validators.required
@@ -23,9 +24,6 @@ export class OmdbSearchComponent implements OnInit {
   constructor(private omdbService: OmdbService) { }
 
   ngOnInit(): void {
-
-    this.searchControl.valueChanges.subscribe(v => console.log);
-
     this.searchResult$ = this.searchControl.valueChanges.pipe(
       // startWith('terminator'),
       debounceTime(350),
@@ -48,6 +46,11 @@ export class OmdbSearchComponent implements OnInit {
     this.omdbService.getMovieInfo(movie.imdbID).subscribe(movieInfo => {
       this.search.emit(movieInfo);
     });
+  }
+
+  clearField(): void {
+    this.searchControl.setValue('', { emitEvent: true });
+    this.clear.emit();
   }
 
 }
