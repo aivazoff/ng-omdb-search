@@ -96,7 +96,7 @@ export class OmdbService {
 
   private request<T>(params: {[key: string]: string | number}): Observable<T> {
 
-    let url = `http://www.omdbapi.com/?apikey=${this.apiKey}&`;
+    let url = `//www.omdbapi.com/?apikey=${this.apiKey}&`;
     url += Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&');
 
     if (this.cache.getItem(url)) {
