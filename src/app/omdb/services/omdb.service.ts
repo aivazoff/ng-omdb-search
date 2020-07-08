@@ -1,9 +1,8 @@
-import {Injectable, Injector} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {API_KEY} from '../omdb.module';
 import {Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs/operators';
-import {CacheService} from './cache.service';
 
 export interface SearchResultItem {
   Poster: string;
@@ -57,14 +56,12 @@ export interface MovieInfo {
   providedIn: 'root'
 })
 export class OmdbService {
-  private readonly apiKey: string;
 
   constructor(
-    private injector: Injector,
+    @Inject(API_KEY) private apiKey: string,
     private http: HttpClient,
     private cache: Storage
   ) {
-    this.apiKey = String(this.injector.get(API_KEY));
   }
 
   search(s: string, page: number = 1): Observable<SearchResult> {

@@ -3,87 +3,9 @@
 </mat-toolbar>
 
 <div class="container py-5">
-  <div class="row justify-content-md-center">
-    <div class="col-lg-9">
-      <mat-form-field>
-        <mat-label>Search</mat-label>
-        <input matInput
-            [matAutocomplete]="movies"
-            [formControl]="searchControl"
-                 placeholder="Enter movie or TV-show title..."
-                 autocomplete="off">
-        <mat-autocomplete #movies="matAutocomplete"
-          [displayWith]="searchControlDisplayFn">
-          <mat-option *ngFor="let it of searchResult$ | async"
-              (onSelectionChange)="onSelection(it)"
-              [value]="it">
-              <span class="poster">
-                  <img
-                    [src]="it.Poster == 'N/A' ? '' : it.Poster"
-                    [alt]="it.Poster == 'N/A' ? '' : it.Title"
-                  >
-              </span>
-              {{ it.Title }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-    </div>
-  </div>
-
+  <app-omdb-search (search)="onSearch($event)" (beforeSarch)="loading = true"></app-omdb-search>
   <ng-container *ngIf="movieInfo">
-
-    <div class="row justify-content-md-center mt-3 mb-4">
-      <div class="col-lg-9">
-        <div class="card margin-auto">
-          <div class="row no-gutters">
-            <div class="col-lg-4" *ngIf="movieInfo.Poster">
-              <img [src]="movieInfo.Poster" class="card-img" alt=" ">
-            </div>
-            <div [class]="'col-lg-'.concat(movieInfo.Poster ? '8' : '12')">
-              <div class="card-body">
-                <h5 class="card-title">{{ movieInfo.Title }}</h5>
-                <p class="card-text">{{ movieInfo.Plot }}</p>
-                <div class="moview-props">
-
-                  <p class="card-text">Year: <small class="text-muted">{{ movieInfo.Year }}</small></p>
-                  <p class="card-text">Country: <small class="text-muted">{{ movieInfo.Country }}</small></p>
-                  <p class="card-text">Released: <small class="text-muted">{{ movieInfo.Released }}</small></p>
-                  <p class="card-text">Duration: <small class="text-muted">{{ movieInfo.Runtime }}</small></p>
-                  <p class="card-text">Genre: <small class="text-muted">{{ movieInfo.Genre }}</small></p>
-
-                  <ng-container *ngIf="movieInfo.Ratings.length > 0">
-                    <hr>
-                    <h3 class="mt-2 mb-1">Ratings: </h3>
-                    <p *ngFor="let rating of movieInfo.Ratings"
-                       class="card-text">{{rating.Source}}: <small class="text-muted">{{ rating.Value }}</small></p>
-                  </ng-container>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row justify-content-md-center">
-      <div class="col-lg-9">
-        <mat-table [dataSource]="tableRows">
-          <ng-container matColumnDef="header">
-            <mat-cell *matCellDef="let element"> {{element.header}} </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="value">
-            <mat-cell *matCellDef="let element">
-              <ng-container [ngSwitch]="element.html">
-                <span *ngSwitchCase="true" [innerHTML]="element.value"></span>
-                <span *ngSwitchDefault>{{element.value}}</span>
-              </ng-container>
-            </mat-cell>
-          </ng-container>
-          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </mat-table>
-      </div>
-    </div>
+    <app-omdb-movie-info [movieInfo]="movieInfo"></app-omdb-movie-info>
   </ng-container>
-
+  <mat-spinner *ngIf="loading"></mat-spinner>
 </div>
