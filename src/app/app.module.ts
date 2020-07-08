@@ -3,25 +3,24 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { OmdbModule, OmdbSearchComponent, OmdbMovieInfoComponent } from './omdb';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MaterialModule } from './material.module';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { OmdbModule, OmdbSearchModule, OmdbMovieInfoModule } from './omdb';
 import config from './config';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    OmdbSearchComponent,
-    OmdbMovieInfoComponent
+    AppComponent
   ],
   imports: [
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
-    MaterialModule,
+    MatToolbarModule,
+    MatProgressSpinnerModule,
     OmdbModule.forRoot(config.omdbApiKey),
-    ReactiveFormsModule,
-    FormsModule
+    OmdbSearchModule,
+    OmdbMovieInfoModule
   ],
   providers: [],
   bootstrap: [AppComponent]

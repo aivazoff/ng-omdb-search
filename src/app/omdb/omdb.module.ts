@@ -3,7 +3,7 @@ import { ModuleWithProviders } from '@angular/compiler/src/core';
 import {HttpClientModule} from '@angular/common/http';
 import {CacheService} from './services/cache.service';
 
-export const API_KEY = new InjectionToken('DataService');
+export const API_KEY = new InjectionToken('OMDB_API_KEY');
 
 @NgModule({
   declarations: [
