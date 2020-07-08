@@ -38,12 +38,7 @@
         <mat-cell *matCellDef="let element">{{element.header}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="value">
-        <mat-cell *matCellDef="let element">
-          <ng-container [ngSwitch]="element.html">
-            <span *ngSwitchCase="true" [innerHTML]="element.value"></span>
-            <span *ngSwitchDefault>{{element.value}}</span>
-          </ng-container>
-        </mat-cell>
+        <mat-cell *matCellDef="let element">{{element.value}}</mat-cell>
       </ng-container>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
