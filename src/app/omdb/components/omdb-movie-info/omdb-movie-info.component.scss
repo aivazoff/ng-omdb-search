@@ -10,3 +10,10 @@
   font-weight: 500;
   flex: 0 30%;
 }
+
+.moview-props {
+  .card-text > b:first-child {
+    margin-right: 10px;
+    font-weight: 500;
+  }
+}
