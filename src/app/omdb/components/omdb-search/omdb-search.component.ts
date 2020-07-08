@@ -30,7 +30,7 @@ export class OmdbSearchComponent implements OnInit {
       distinctUntilChanged(),
       filter(val => typeof val === 'string'),
       switchMap((s: string) => {
-        return (s || '').trim().length >= 5
+        return (s || '').trim().length >= 4 // Фильм "Lucy" 4 символа
           ? this.omdbService.search(s).pipe(map(res => res.Search))
           : of([]);
       })
