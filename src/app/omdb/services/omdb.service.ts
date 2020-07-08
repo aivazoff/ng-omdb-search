@@ -1,8 +1,8 @@
 import {Inject, Injectable} from '@angular/core';
-import {API_KEY} from '../omdb.module';
-import {Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {API_KEY} from '../omdb.module';
 
 export interface SearchResultItem {
   Poster: string;
