@@ -2,7 +2,7 @@ import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs/operators';
 import {Observable, of} from 'rxjs';
-import {API_KEY} from '../omdb.module';
+import {OMDB_API_KEY} from '../omdb.module';
 
 export interface SearchResultItem {
   Poster: string;
@@ -57,7 +57,7 @@ export interface MovieInfo {
 export class OmdbService {
 
   constructor(
-    @Inject(API_KEY) private apiKey: string,
+    @Inject(OMDB_API_KEY) private apiKey: string,
     private http: HttpClient,
     private cache: Storage
   ) {

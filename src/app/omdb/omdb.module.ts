@@ -3,7 +3,7 @@ import { ModuleWithProviders } from '@angular/compiler/src/core';
 import {HttpClientModule} from '@angular/common/http';
 import {CacheService} from './services/cache.service';
 
-export const API_KEY = new InjectionToken('OMDB_API_KEY');
+export const OMDB_API_KEY = new InjectionToken('OMDB_API_KEY');
 
 @NgModule({
   declarations: [
@@ -19,7 +19,7 @@ export class OmdbModule {
     return {
       ngModule: OmdbModule,
       providers: [
-        { provide: API_KEY, useValue: apiKey },
+        { provide: OMDB_API_KEY, useValue: apiKey },
         { provide: Storage, useClass: CacheService }
       ]
     };
