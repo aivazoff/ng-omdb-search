@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MovieInfo, OmdbService, SearchResult, SearchResultItem} from './omdb/services/omdb.service';
-import {MatTableDataSource} from '@angular/material/table';
+import {MovieInfo, OmdbService, SearchResultItem} from './omdb/services/omdb.service';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
-import {Subject} from 'rxjs';
+import {MatTableDataSource} from '@angular/material/table';
 import {takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-root',
