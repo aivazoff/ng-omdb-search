@@ -1,5 +1,5 @@
 <div class="row justify-content-md-center">
-  <div class="col-lg-9">
+  <form #searchForm="ngForm" class="col-lg-9" (ngSubmit)="search()">
 
     <mat-form-field>
       <mat-label>Search</mat-label>
@@ -27,7 +27,7 @@
       </mat-autocomplete>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="button" (click)="search()">Search</button>
+    <button mat-raised-button color="primary" type="submit">Search</button>
 
-  </div>
+  </form>
 </div>
