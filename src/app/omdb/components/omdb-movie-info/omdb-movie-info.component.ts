@@ -68,3 +68,20 @@ export class OmdbInfoCardComponent {
   @Input() image: string;
   @Input() title: string;
 }
+
+
+@Component({
+  selector: 'app-omdb-info-card-row',
+  template: `<p class="card-text">
+    <b>{{ title }}:</b> <small class="text-muted"><ng-content></ng-content></small>
+  </p>`,
+  styles: [`
+    .card-text > b:first-child {
+      margin-right: 10px;
+      font-weight: 500;
+    }
+  `]
+})
+export class OmdbInfoCardRowComponent {
+  @Input() title: string;
+}

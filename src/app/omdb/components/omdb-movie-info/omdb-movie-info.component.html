@@ -3,11 +3,13 @@
     <app-omdb-info-card [image]="movieInfo.Poster" [title]="movieInfo.Title">
       <p class="card-text">{{ movieInfo.Plot }}</p>
       <div class="moview-props">
-        <p class="card-text"><b>Year:</b> <small class="text-muted">{{ movieInfo.Year }}</small></p>
-        <p class="card-text"><b>Country:</b> <small class="text-muted">{{ movieInfo.Country }}</small></p>
-        <p class="card-text"><b>Released:</b> <small class="text-muted">{{ movieInfo.Released }}</small></p>
-        <p class="card-text"><b>Duration:</b> <small class="text-muted">{{ movieInfo.Runtime }}</small></p>
-        <p class="card-text"><b>Genre:</b> <small class="text-muted">{{ movieInfo.Genre }}</small></p>
+
+        <app-omdb-info-card-row title="Year">{{ movieInfo.Year }}</app-omdb-info-card-row>
+        <app-omdb-info-card-row title="Country">{{ movieInfo.Country }}</app-omdb-info-card-row>
+        <app-omdb-info-card-row title="Released">{{ movieInfo.Released }}</app-omdb-info-card-row>
+        <app-omdb-info-card-row title="Released">{{ movieInfo.Released }}</app-omdb-info-card-row>
+        <app-omdb-info-card-row title="Duration">{{ movieInfo.Runtime }}</app-omdb-info-card-row>
+        <app-omdb-info-card-row title="Genre">{{ movieInfo.Genre }}</app-omdb-info-card-row>
 
         <ng-container *ngIf="movieInfo.Ratings.length > 0">
           <hr>

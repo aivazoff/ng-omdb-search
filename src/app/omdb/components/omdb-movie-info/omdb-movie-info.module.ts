@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {OmdbInfoCardComponent, OmdbMovieInfoComponent} from './omdb-movie-info.component';
+import {OmdbInfoCardComponent, OmdbInfoCardRowComponent, OmdbMovieInfoComponent} from './omdb-movie-info.component';
 import { MatTableModule } from '@angular/material/table';
 
 
@@ -8,7 +8,8 @@ import { MatTableModule } from '@angular/material/table';
 @NgModule({
   declarations: [
     OmdbMovieInfoComponent,
-    OmdbInfoCardComponent
+    OmdbInfoCardComponent,
+    OmdbInfoCardRowComponent
   ],
   imports: [
     CommonModule,
