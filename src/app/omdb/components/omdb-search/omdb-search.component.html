@@ -8,11 +8,11 @@
              [formControl]="searchControl"
              placeholder="Enter movie or TV-show title..."
              autocomplete="off">
-      <button mat-button *ngIf="searchControl.value" matSuffix mat-icon-button
+      <button mat-button type="button" *ngIf="searchControl.value" matSuffix mat-icon-button
               aria-label="Clear" (click)="clearField()">
         <mat-icon>close</mat-icon>
       </button>
-      <mat-autocomplete #movies="matAutocomplete">
+      <mat-autocomplete #movies="matAutocomplete">clearField
         <mat-option *ngFor="let it of searchResult$ | async"
                     (onSelectionChange)="onSelection(it)"
                     [value]="it.Title">
