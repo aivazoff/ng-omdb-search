@@ -44,3 +44,27 @@ export class OmdbMovieInfoComponent implements OnInit {
   }
 
 }
+
+
+@Component({
+  selector: 'app-omdb-info-card',
+  template: `
+    <div class="card margin-auto">
+      <div class="row no-gutters">
+        <div class="col-lg-4" *ngIf="image">
+          <img [src]="image" [alt]="title" class="card-img">
+        </div>
+        <div [class]="'col-lg-'.concat(image ? '8' : '12')">
+          <div class="card-body">
+            <h1 class="card-title">{{ title }}</h1>
+            <ng-content></ng-content>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+})
+export class OmdbInfoCardComponent {
+  @Input() image: string;
+  @Input() title: string;
+}

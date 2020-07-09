@@ -5,32 +5,30 @@ import { Injectable } from '@angular/core';
 })
 export class CacheService implements Storage {
   private readonly storage: Storage;
+  readonly length: number;
+  [name: string]: any;
 
   constructor() {
     this.storage = window.localStorage;
-  }
-
-  [name: string]: any;
-
-  readonly length: number;
-
-  clear(): void {
-    this.storage.clear();
   }
 
   getItem(key: string): string | null {
     return this.storage.getItem(key);
   }
 
-  key(index: number): string | null {
-    return this.storage.key(index);
+  setItem(key: string, value: string): void {
+    this.storage.setItem(key, value);
   }
 
   removeItem(key: string): void {
     this.storage.removeItem(key);
   }
 
-  setItem(key: string, value: string): void {
-    this.storage.setItem(key, value);
+  key(index: number): string | null {
+    return this.storage.key(index);
+  }
+
+  clear(): void {
+    this.storage.clear();
   }
 }

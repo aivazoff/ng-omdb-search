@@ -1,7 +1,7 @@
 import {Component, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
-import {debounceTime, distinctUntilChanged, filter, map, startWith, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {OmdbService, SearchResult, SearchResultItem} from '../../services/omdb.service';
+import {debounceTime, distinctUntilChanged, map, switchMap, takeUntil} from 'rxjs/operators';
+import {OmdbService, SearchResultItem} from '../../services/omdb.service';
 import {Observable, of, Subject} from 'rxjs';
 import {AppValidators} from '../../../validators';
 
