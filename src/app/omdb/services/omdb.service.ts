@@ -76,7 +76,12 @@ export class OmdbService {
         map(resp => ({
           Response: (resp.Response.toLocaleLowerCase() === 'true'),
           totalResults: resp.totalResults,
-          Search: resp.Search
+          Search: (resp.Search || []).map(movieInfo => {
+            if ((movieInfo.Poster || '').toUpperCase() === 'N/A') {
+              movieInfo.Poster = null;
+            }
+            return movieInfo;
+          })
         }))
 
     );
@@ -96,7 +101,7 @@ export class OmdbService {
   private request<T>(params: {[key: string]: string | number}): Observable<T> {
 
     let url = `https://www.omdbapi.com/?apikey=${this.apiKey}&`;
-    url += Object.entries(params).map(([k, v]) => `${k}=${v}`).join('&');
+    url += Object.entries(params).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');
 
     if (this.cache.getItem(url)) {
       return of(JSON.parse(this.cache.getItem(url)) as T);

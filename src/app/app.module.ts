@@ -7,6 +7,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { OmdbModule, OmdbSearchModule, OmdbMovieInfoModule } from './omdb';
 import config from './config';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -20,7 +24,11 @@ import config from './config';
     MatProgressSpinnerModule,
     OmdbModule.forRoot(config.omdbApiKey),
     OmdbSearchModule,
-    OmdbMovieInfoModule
+    OmdbMovieInfoModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatButtonModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

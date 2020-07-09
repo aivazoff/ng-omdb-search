@@ -4,15 +4,43 @@
 
 <div class="container py-5">
 
-  <app-omdb-search
-    (beforeSarch)="onBeforeSarch()"
-    (search)="onSearch($event)"
-    (clear)="onClear()"
-  ></app-omdb-search>
+  <app-omdb-search (selection)="onSelect($event)" (clear)="onClear()"></app-omdb-search>
+
+  <div [hidden]="hiddenTable" class="row justify-content-md-center">
+    <div class="col-lg-9">
+      <table mat-table [dataSource]="searchResult" class="search-result-table">
+
+        <ng-container matColumnDef="poster">
+          <th mat-header-cell *matHeaderCellDef>Poster</th>
+          <td mat-cell *matCellDef="let item">
+            <div class="poster-cell">
+              <img *ngIf="item.Poster" [src]="item.Poster" width="50">
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Title</th>
+          <td mat-cell *matCellDef="let item">{{item.Title}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showInfo(row)"></tr>
+      </table>
+
+      <mat-paginator [length]="totalResults" [pageSize]="pageSize" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
 
   <ng-container *ngIf="movieInfo">
-    <app-omdb-movie-info [movieInfo]="movieInfo"></app-omdb-movie-info>
+    <div class="movieInfo">
+      <button mat-mini-fab color="warn" class="close-btn" (click)="closeInfo()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <app-omdb-movie-info [movieInfo]="movieInfo"></app-omdb-movie-info>
+    </div>
   </ng-container>
 
   <mat-spinner *ngIf="loading"></mat-spinner>
+
 </div>

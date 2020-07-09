@@ -12,11 +12,10 @@
               aria-label="Clear" (click)="clearField()">
         <mat-icon>close</mat-icon>
       </button>
-      <mat-autocomplete #movies="matAutocomplete"
-                        [displayWith]="searchControlDisplayFn">
+      <mat-autocomplete #movies="matAutocomplete">
         <mat-option *ngFor="let it of searchResult$ | async"
                     (onSelectionChange)="onSelection(it)"
-                    [value]="it">
+                    [value]="it.Title">
               <span class="poster">
                   <img
                     [src]="it.Poster == 'N/A' ? '' : it.Poster"
@@ -27,6 +26,8 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
+
+    <button mat-raised-button color="primary" type="button" (click)="search()">Search</button>
 
   </div>
 </div>

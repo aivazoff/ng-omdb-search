@@ -26,3 +26,13 @@
 
   }
 }
+
+
+.mat-form-field {
+  width: calc(100% - 80px);
+
+  + button {
+    position: relative;
+    right: -10px;
+  }
+}

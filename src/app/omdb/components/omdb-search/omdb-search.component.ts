@@ -1,52 +1,50 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
-import {debounceTime, distinctUntilChanged, filter, map, startWith, switchMap, tap} from 'rxjs/operators';
-import {MovieInfo, OmdbService, SearchResultItem} from '../../services/omdb.service';
-import {Observable, of} from 'rxjs';
+import {debounceTime, distinctUntilChanged, filter, map, startWith, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {OmdbService, SearchResult, SearchResultItem} from '../../services/omdb.service';
+import {Observable, of, Subject} from 'rxjs';
+import {AppValidators} from '../../../validators';
 
 @Component({
   selector: 'app-omdb-search',
   templateUrl: './omdb-search.component.html',
   styleUrls: ['./omdb-search.component.scss']
 })
-export class OmdbSearchComponent implements OnInit {
+export class OmdbSearchComponent implements OnInit, OnDestroy {
 
-  @Output() beforeSarch = new EventEmitter<void>();
-  @Output() search = new EventEmitter<MovieInfo>();
+  @Output() selection = new EventEmitter<string>();
   @Output() clear = new EventEmitter<void>();
 
+  // Фильм "Lucy" 4 символа
+  minLen = 4;
+
   searchControl = new FormControl('', [
-    Validators.required
+    Validators.required,
+    Validators.minLength(this.minLen),
+    AppValidators.noWhitespaceValidator
   ]);
 
   searchResult$: Observable<SearchResultItem[]>;
+  private destroyed$ = new Subject();
 
   constructor(private omdbService: OmdbService) { }
 
   ngOnInit(): void {
     this.searchResult$ = this.searchControl.valueChanges.pipe(
-      // startWith('terminator'),
       debounceTime(350),
       distinctUntilChanged(),
-      filter(val => typeof val === 'string'),
-      map(s => s.trim()),
+      map(val => val.trim()),
+      takeUntil(this.destroyed$),
       switchMap((s: string) => {
-        return s.length >= 4 // Фильм "Lucy" 4 символа
+        return this.searchControl.valid
           ? this.omdbService.search(s).pipe(map(res => res.Search))
           : of([]);
       })
     );
   }
 
-  searchControlDisplayFn(moview: SearchResultItem): string {
-    return moview ? moview.Title : null;
-  }
-
   onSelection(movie: SearchResultItem): void {
-    this.beforeSarch.emit();
-    this.omdbService.getMovieInfo(movie.imdbID).subscribe(movieInfo => {
-      this.search.emit(movieInfo);
-    });
+    this.selection.emit(movie.Title);
   }
 
   clearField(): void {
@@ -54,4 +52,13 @@ export class OmdbSearchComponent implements OnInit {
     this.clear.emit();
   }
 
+  search(): void {
+    if (this.searchControl.valid) {
+      this.selection.emit(this.searchControl.value.trim());
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+  }
 }
