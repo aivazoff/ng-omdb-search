@@ -45,7 +45,6 @@ export class OmdbMovieInfoComponent implements OnInit {
 
 }
 
-
 @Component({
   selector: 'app-omdb-info-card',
   template: `
@@ -68,7 +67,6 @@ export class OmdbInfoCardComponent {
   @Input() image: string;
   @Input() title: string;
 }
-
 
 @Component({
   selector: 'app-omdb-info-card-row',
