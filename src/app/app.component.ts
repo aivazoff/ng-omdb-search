@@ -19,9 +19,9 @@ export class AppComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject();
   totalResults: number;
   movieInfo: MovieInfo;
-  loading: boolean;
   searchValue: string;
   hiddenTable = true;
+  loading = false;
   pageSize = 10;
 
   constructor(private omdbService: OmdbService) {
