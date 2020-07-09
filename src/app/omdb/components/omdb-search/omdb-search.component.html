@@ -17,10 +17,7 @@
                     (onSelectionChange)="onSelection(it)"
                     [value]="it.Title">
               <span class="poster">
-                  <img
-                    [src]="it.Poster == 'N/A' ? '' : it.Poster"
-                    [alt]="it.Poster == 'N/A' ? '' : it.Title"
-                  >
+                  <img *ngIf="it.Poster" [src]="it.Poster" [alt]="it.Title">
               </span>
           {{ it.Title }}
         </mat-option>
