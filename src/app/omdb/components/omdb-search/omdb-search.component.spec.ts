@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { OmdbSearchComponent } from './omdb-search.component';
 
@@ -6,7 +6,7 @@ describe('SearchComponent', () => {
   let component: OmdbSearchComponent;
   let fixture: ComponentFixture<OmdbSearchComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ OmdbSearchComponent ]
     })

@@ -10,7 +10,7 @@ interface TableRow {
 @Component({
   selector: 'app-omdb-movie-info',
   templateUrl: './omdb-movie-info.component.html',
-  styleUrls: ['./omdb-movie-info.component.scss']
+  styleUrls: ['./omdb-movie-info.component.scss'],
 })
 export class OmdbMovieInfoComponent implements OnInit {
 
