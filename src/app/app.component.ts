@@ -1,9 +1,12 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MovieInfo, OmdbService, SearchResultItem} from './omdb/services/omdb.service';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import {fromEvent, Subject} from 'rxjs';
+import {DOCUMENT} from '@angular/common';
+
+type SearchResultList = Array<SearchResultItem>;
 
 @Component({
   selector: 'app-root',
@@ -15,7 +18,6 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   dataSource: MatTableDataSource<SearchResultItem>;
   displayedColumns: string[] = ['poster', 'title'];
-  searchResult: Array<SearchResultItem>;
   private destroyed$ = new Subject();
   totalResults: number;
   movieInfo: MovieInfo;
@@ -23,11 +25,35 @@ export class AppComponent implements OnInit, OnDestroy {
   hiddenTable = true;
   loading = false;
   pageSize = 10;
+  lastScrollTop = 0;
 
-  constructor(private omdbService: OmdbService) {
+  private _searchResult: SearchResultList;
+  get searchResult(): SearchResultList {
+    return this._searchResult;
+  }
+  set searchResult(searchResult: SearchResultList) {
+    this._searchResult = searchResult;
+    this.scrollToTop();
+  }
+
+  constructor(
+    private omdbService: OmdbService,
+    private zone: NgZone,
+    @Inject(DOCUMENT) private document: Document
+  ) {
   }
 
   ngOnInit(): void {
+    this.zone.runOutsideAngular(() => {
+      fromEvent(this.document, 'scroll')
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe(e => {
+          if (!this.hiddenTable) {
+            this.lastScrollTop = this.document.scrollingElement.scrollTop;
+          }
+        });
+    });
+
     this.paginator.page
       .pipe(takeUntil(this.destroyed$))
       .subscribe((e: PageEvent) => {
@@ -84,9 +110,18 @@ export class AppComponent implements OnInit, OnDestroy {
   closeInfo(): void {
     this.hiddenTable = false;
     this.movieInfo = null;
+    if (this.lastScrollTop) {
+      setTimeout(() => {
+        this.document.scrollingElement.scrollTop = this.lastScrollTop;
+      });
+    }
   }
 
   ngOnDestroy(): void {
     this.destroyed$.next();
+  }
+
+  private scrollToTop(): void {
+    this.document.scrollingElement.scrollTop = 0;
   }
 }
