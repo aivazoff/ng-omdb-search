@@ -1,10 +1,11 @@
-import {Component, Inject, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, Inject, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {MovieInfo, OmdbService, SearchResultItem} from './omdb/services/omdb.service';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
-import {takeUntil} from 'rxjs/operators';
 import {fromEvent, Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {DOCUMENT} from '@angular/common';
+import {OmdbSearchComponent} from './omdb/components/omdb-search/omdb-search.component';
 
 type SearchResultList = Array<SearchResultItem>;
 
@@ -33,13 +34,21 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   set searchResult(searchResult: SearchResultList) {
     this._searchResult = searchResult;
-    this.scrollToTop();
+    this.documentScrollTop = 0;
+  }
+
+  private get documentScrollTop(): number {
+    return this.document.scrollingElement.scrollTop;
+  }
+
+  private set documentScrollTop(scrollTop: number) {
+    this.document.scrollingElement.scrollTop = scrollTop;
   }
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     private omdbService: OmdbService,
-    private zone: NgZone,
-    @Inject(DOCUMENT) private document: Document
+    private zone: NgZone
   ) {
   }
 
@@ -47,9 +56,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.zone.runOutsideAngular(() => {
       fromEvent(this.document, 'scroll')
         .pipe(takeUntil(this.destroyed$))
-        .subscribe(e => {
+        .subscribe(() => {
           if (!this.hiddenTable) {
-            this.lastScrollTop = this.document.scrollingElement.scrollTop;
+            this.lastScrollTop = this.documentScrollTop;
           }
         });
     });
@@ -67,6 +76,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.searchResult = result.Search;
             this.hiddenTable = false;
             this.loading = false;
+            this.lastScrollTop = 0;
           });
       });
   }
@@ -87,6 +97,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.hiddenTable = false;
         this.movieInfo = null;
         this.loading = false;
+        this.lastScrollTop = 0;
       });
   }
 
@@ -104,6 +115,11 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe(movieInfo => {
         this.movieInfo = movieInfo;
         this.loading = false;
+        setTimeout(() => {
+          if (this.documentScrollTop > 0) {
+            this.documentScrollTop = 0;
+          }
+        });
       });
   }
 
@@ -112,16 +128,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this.movieInfo = null;
     if (this.lastScrollTop) {
       setTimeout(() => {
-        this.document.scrollingElement.scrollTop = this.lastScrollTop;
+        this.documentScrollTop = this.lastScrollTop;
+        this.lastScrollTop = 0;
       });
     }
   }
 
   ngOnDestroy(): void {
     this.destroyed$.next();
-  }
-
-  private scrollToTop(): void {
-    this.document.scrollingElement.scrollTop = 0;
   }
 }
