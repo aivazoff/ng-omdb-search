@@ -27,7 +27,6 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showInfo(row)"></tr>
       </table>
-
       <mat-paginator [length]="totalResults" [pageSize]="pageSize" showFirstLastButtons></mat-paginator>
     </div>
   </div>

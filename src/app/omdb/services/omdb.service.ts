@@ -100,17 +100,21 @@ export class OmdbService {
 
   private request<T>(params: {[key: string]: string | number}): Observable<T> {
 
-    let url = `https://www.omdbapi.com/?apikey=${this.apiKey}&`;
-    url += Object.entries(params).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');
+    const url = `https://www.omdbapi.com/?${this.serialize({...params, apikey: this.apiKey})}`;
 
     if (this.cache.getItem(url)) {
       return of(JSON.parse(this.cache.getItem(url)) as T);
     }
 
-    return this.http.get<T>(url).pipe(
-      tap(res => {
-        this.cache.setItem(url, JSON.stringify(res));
-      })
-    );
+    return this.http.get<T>(url)
+      .pipe(
+        tap(res => {
+          this.cache.setItem(url, JSON.stringify(res));
+        })
+      );
+  }
+
+  private serialize(params: {[key: string]: string | number}): string {
+    return Object.entries(params).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');
   }
 }

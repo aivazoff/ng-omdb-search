@@ -14,9 +14,7 @@ export class OmdbSearchComponent implements OnInit, OnDestroy {
 
   @Output() selection = new EventEmitter<string>();
   @Output() clear = new EventEmitter<void>();
-
-  // Фильм "Lucy" 4 символа
-  minLen = 4;
+  minLen = 3;
 
   searchControl = new FormControl('', [
     Validators.required,
