@@ -1,0 +1,32 @@
+.mat-spinner {
+  margin: 100px auto;
+}
+
+.mat-column-Poster {
+  padding: 15px !important;
+  width: 50px;
+  .poster-cell {
+    vertical-align: middle;
+    display: inline-block;
+    line-height: 65px;
+    min-height: 65px;
+  }
+}
+
+.search-result-table {
+  width: 100%;
+
+  tr:hover td {
+    background: #EEE;
+    cursor: pointer;
+  }
+}
+
+.movieInfo .close-btn {
+  display: block;
+  margin: auto;
+}
+
+app-omdb-movie-info {
+  margin-bottom: 15px;
+}

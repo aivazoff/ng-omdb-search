@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, OnDestroy, Input} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {debounceTime, distinctUntilChanged, map, switchMap, takeUntil} from 'rxjs/operators';
 import {OmdbService, SearchResultItem} from '../../services/omdb.service';
@@ -14,6 +14,11 @@ export class OmdbSearchComponent implements OnInit, OnDestroy {
 
   @Output() selection = new EventEmitter<string>();
   @Output() clear = new EventEmitter<void>();
+  @Input() set value(value: string) {
+    if (this.searchControl.value !== value) {
+      this.searchControl.setValue(value);
+    }
+  }
   minLen = 3;
 
   searchControl = new FormControl('', [
@@ -32,12 +37,12 @@ export class OmdbSearchComponent implements OnInit, OnDestroy {
       debounceTime(350),
       distinctUntilChanged(),
       map(val => val.trim()),
-      takeUntil(this.destroyed$),
       switchMap((s: string) => {
         return this.searchControl.valid
           ? this.omdbService.search(s).pipe(map(res => res.Search))
           : of([]);
-      })
+      }),
+      takeUntil(this.destroyed$)
     );
   }
 
