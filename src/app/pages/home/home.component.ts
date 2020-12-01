@@ -175,5 +175,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.hiddenTable = true;
     this.searchResult = null;
     this.totalResults = null;
+    this.searchValue = null;
   }
 }
