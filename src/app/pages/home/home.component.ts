@@ -97,6 +97,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (param.s) {
         this.search(param.s, pageNumber);
       } else {
+        this.searchValue = null;
+        this.movieInfo = null;
         this.clear();
       }
     });
@@ -175,6 +177,5 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.hiddenTable = true;
     this.searchResult = null;
     this.totalResults = null;
-    this.searchValue = null;
   }
 }
