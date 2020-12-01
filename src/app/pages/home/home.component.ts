@@ -96,6 +96,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.paginator.pageIndex = pageNumber - 1;
       if (param.s) {
         this.search(param.s, pageNumber);
+      } else {
+        this.clear();
       }
     });
 
@@ -113,9 +115,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onClear(): void {
     this.setNavigateQueryParams({});
-    this.hiddenTable = true;
-    this.searchResult = null;
-    this.totalResults = null;
+    this.clear();
   }
 
   showInfo({imdbID}): void {
@@ -169,5 +169,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.lastScrollTop = 0;
       });
+  }
+
+  private clear(): void {
+    this.hiddenTable = true;
+    this.searchResult = null;
+    this.totalResults = null;
   }
 }
