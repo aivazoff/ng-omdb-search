@@ -50,10 +50,10 @@ export class OmdbMovieInfoComponent implements OnInit {
   template: `
     <div class="card margin-auto">
       <div class="row no-gutters">
-        <div class="col-lg-4" *ngIf="image">
-          <img [src]="image" [alt]="title" class="card-img">
+        <div class="col-md-4" *ngIf="image">
+          <img [src]="image" [alt]="title" class="card-img p-2">
         </div>
-        <div [class]="'col-lg-'.concat(image ? '8' : '12')">
+        <div [class]="'col-md-'.concat(image ? '8' : '12')">
           <div class="card-body">
             <h1 class="card-title">{{ title }}</h1>
             <ng-content></ng-content>
