@@ -53,7 +53,7 @@ export class OmdbMovieInfoComponent implements OnInit {
         <div class="col-md-4" *ngIf="image">
           <img [src]="image" [alt]="title" class="card-img p-2">
         </div>
-        <div [class]="'col-md-'.concat(image ? '8' : '12')">
+        <div class="col">
           <div class="card-body">
             <h1 class="card-title">{{ title }}</h1>
             <ng-content></ng-content>
@@ -70,9 +70,14 @@ export class OmdbInfoCardComponent {
 
 @Component({
   selector: 'app-omdb-info-card-row',
-  template: `<p class="card-text">
-    <b>{{ title }}:</b> <small class="text-muted"><ng-content></ng-content></small>
-  </p>`,
+  template: `
+    <p class="card-text">
+      <b>{{ title }}:</b>
+      <small class="text-muted">
+        <ng-content></ng-content>
+      </small>
+    </p>
+  `,
   styles: [`
     .card-text > b:first-child {
       margin-right: 10px;
