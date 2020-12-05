@@ -1,8 +1,6 @@
 # Angular use omdb api example
-https://ng-omdb-search.web.app
-
-
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.1.
+#####Example: https://ng-omdb-search.web.app
 
 ## Development server
 
