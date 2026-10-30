@@ -1,181 +1,130 @@
-import {Component, Inject, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Params, QueryParamsHandling, Router} from '@angular/router';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
-import {DOCUMENT} from '@angular/common';
-import {fromEvent, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { EMPTY, Observable, Subject, catchError, map, switchMap, takeUntil, tap } from 'rxjs';
+import { MovieInfo, SearchResultItem } from '../../core/models/movie';
+import { OmdbService } from '../../core/services/omdb.service';
+import { MovieCardComponent } from '../../shared/components/movie-card/movie-card.component';
+import { MovieDetailComponent } from '../../shared/components/movie-detail/movie-detail.component';
+import { SearchBarComponent } from '../../shared/components/search-bar/search-bar.component';
 
-import {MovieInfo, OmdbService, SearchResultItem} from '@app/omdb/services/omdb.service';
+export const PAGE_SIZE = 10;
 
-type SearchResultList = Array<SearchResultItem>;
-
-interface TableColumn {
-  render: (item: SearchResultItem) => string;
-  display?: boolean;
-  name: string;
+interface SearchState {
+  term: string;
+  page: number;
+  movies: SearchResultItem[];
+  totalResults: number;
 }
+
+const EMPTY_STATE: SearchState = { term: '', page: 1, movies: [], totalResults: 0 };
 
 @Component({
   selector: 'app-home',
+  standalone: true,
+  imports: [MovieCardComponent, MovieDetailComponent, SearchBarComponent, MatButtonModule, MatIconModule, MatProgressSpinnerModule, MatPaginatorModule],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnDestroy {
+  readonly pageSize = PAGE_SIZE;
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  dataSource: MatTableDataSource<SearchResultItem>;
-  private destroyed$ = new Subject();
-  totalResults: number;
-  movieInfo: MovieInfo;
-  searchValue: string;
-  hiddenTable = true;
-  loading = false;
-  pageSize = 10;
-  lastScrollTop = 0;
+  private readonly omdbService = inject(OmdbService);
+  private readonly query$ = new Subject<{ term: string; page: number }>();
+  private readonly detailRequested$ = new Subject<string>();
+  private readonly destroyed$ = new Subject<void>();
 
-  tableColums: TableColumn[] = [
-    {
-      render: (item: SearchResultItem) => {
-        const image = item.Poster ? `<img src="${item.Poster}" width="50">` : '';
-        return `<div class="poster-cell">${image}</div>`;
-      },
-      name: 'Poster'
-    },
-    {
-      render: (item: SearchResultItem) => item.Title,
-      name: 'Title'
+  readonly loading = signal(false);
+  readonly loadingDetail = signal(false);
+  readonly error = signal<string | null>(null);
+  readonly state = signal<SearchState>(EMPTY_STATE);
+  readonly movieInfo = signal<MovieInfo | null>(null);
+
+  readonly totalResults = computed(() => this.state().totalResults);
+  readonly movies = computed(() => this.state().movies);
+  readonly searchTerm = computed(() => this.state().term);
+  readonly currentPage = computed(() => this.state().page);
+  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.totalResults() / PAGE_SIZE)));
+
+  constructor() {
+    this.query$
+      .pipe(switchMap(({ term, page }) => this.fetchPage(term, page)), takeUntil(this.destroyed$))
+      .subscribe((state) => {
+        if (state) {
+          this.state.set(state);
+        }
+      });
+
+    this.detailRequested$
+      .pipe(switchMap((imdbId) => this.fetchDetail(imdbId)), takeUntil(this.destroyed$))
+      .subscribe((movie) => {
+        if (movie) {
+          this.movieInfo.set(movie);
+          this.loadingDetail.set(false);
+        }
+      });
+  }
+
+  onSearch(term: string): void {
+    this.query$.next({ term, page: 1 });
+  }
+
+  onChangePage(page: number): void {
+    const term = this.state().term;
+    if (term) {
+      this.query$.next({ term, page });
     }
-  ];
-
-  get displayedColumns(): string[] {
-    return this.tableColums
-      .filter(col => col.display !== false)
-      .map(col => col.name);
   }
 
-  private _searchResult: SearchResultList;
-  get searchResult(): SearchResultList {
-    return this._searchResult;
-  }
-  set searchResult(searchResult: SearchResultList) {
-    this._searchResult = searchResult;
-    this.documentScrollTop = 0;
-  }
-
-  private get documentScrollTop(): number {
-    return this.document.scrollingElement.scrollTop;
+  onClearSearch(): void {
+    this.state.set(EMPTY_STATE);
+    this.error.set(null);
+    this.movieInfo.set(null);
+    this.loading.set(false);
+    this.loadingDetail.set(false);
   }
 
-  private set documentScrollTop(scrollTop: number) {
-    this.document.scrollingElement.scrollTop = scrollTop;
-  }
-
-  constructor(
-    private omdbService: OmdbService,
-    @Inject(DOCUMENT) private document: Document,
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private zone: NgZone
-  ) {
-  }
-
-  ngOnInit(): void {
-    this.zone.runOutsideAngular(() => {
-      fromEvent(this.document, 'scroll')
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe(() => {
-          if (!this.hiddenTable) {
-            this.lastScrollTop = this.documentScrollTop;
-          }
-        });
-    });
-
-    this.activatedRoute.queryParams.subscribe((param: Params) => {
-      const pageNumber = Number(param.p) || 1;
-      this.paginator.pageIndex = pageNumber - 1;
-      if (param.s) {
-        this.search(param.s, pageNumber);
-      } else {
-        this.searchValue = null;
-        this.movieInfo = null;
-        this.clear();
-      }
-    });
-
-    this.paginator.page
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(e => {
-        this.setNavigateQueryParams({p: e.pageIndex + 1}, 'merge');
-      });
-  }
-
-  onSelect(value: string): void {
-    this.setNavigateQueryParams({s: value, p: 1});
-    this.movieInfo = null;
-  }
-
-  onClear(): void {
-    this.setNavigateQueryParams({});
-    this.clear();
-  }
-
-  showInfo({imdbID}): void {
-    this.hiddenTable = true;
-    this.loading = true;
-
-    this.omdbService.getMovieInfo(imdbID)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(movieInfo => {
-        this.movieInfo = movieInfo;
-        this.loading = false;
-        setTimeout(() => {
-          if (this.documentScrollTop > 0) {
-            this.documentScrollTop = 0;
-          }
-        });
-      });
+  showInfo(movie: SearchResultItem): void {
+    this.loadingDetail.set(true);
+    this.movieInfo.set(null);
+    this.detailRequested$.next(movie.imdbID);
   }
 
   closeInfo(): void {
-    this.hiddenTable = false;
-    this.movieInfo = null;
-    if (this.lastScrollTop) {
-      setTimeout(() => {
-        this.documentScrollTop = this.lastScrollTop;
-        this.lastScrollTop = 0;
-      });
-    }
+    this.movieInfo.set(null);
+    this.loadingDetail.set(false);
+  }
+
+  private fetchPage(term: string, page: number): Observable<SearchState> {
+    this.loading.set(true);
+    this.error.set(null);
+    return this.omdbService.search(term, page).pipe(
+      map((result) => ({ term, page, movies: result.Search, totalResults: result.totalResults })),
+      tap(() => this.loading.set(false)),
+      catchError((err: Error) => {
+        this.loading.set(false);
+        this.error.set(err.message);
+        return EMPTY;
+      }),
+    );
+  }
+
+  private fetchDetail(imdbId: string): Observable<MovieInfo> {
+    this.loadingDetail.set(true);
+    this.movieInfo.set(null);
+    return this.omdbService.getMovieInfo(imdbId).pipe(
+      catchError((err: Error) => {
+        this.loadingDetail.set(false);
+        this.error.set(err.message);
+        return EMPTY;
+      }),
+    );
   }
 
   ngOnDestroy(): void {
     this.destroyed$.next();
-  }
-
-  private setNavigateQueryParams(queryParams: Params, queryParamsHandling?: QueryParamsHandling): void {
-    this.router.navigate([''], {queryParams, queryParamsHandling});
-  }
-
-  private search(searchValue: string, pageNumber?: number): void {
-    this.searchValue = searchValue;
-    this.hiddenTable = true;
-    this.loading = true;
-
-    this.omdbService
-      .search(searchValue, pageNumber)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(result => {
-        this.totalResults = result.totalResults;
-        this.searchResult = result.Search;
-        this.hiddenTable = false;
-        this.loading = false;
-        this.lastScrollTop = 0;
-      });
-  }
-
-  private clear(): void {
-    this.hiddenTable = true;
-    this.searchResult = null;
-    this.totalResults = null;
+    this.destroyed$.complete();
   }
 }

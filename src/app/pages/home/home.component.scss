@@ -1,32 +1,116 @@
-.mat-spinner {
-  margin: 100px auto;
-}
+.home-header {
+  text-align: center;
+  padding: clamp(24px, 6vw, 72px) 24px;
+  background: linear-gradient(180deg, var(--surface-alt), var(--surface));
 
-.mat-column-Poster {
-  padding: 15px !important;
-  width: 50px;
-  .poster-cell {
-    vertical-align: middle;
-    display: inline-block;
-    line-height: 65px;
-    min-height: 65px;
+  .home-header__title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4.5vw, 56px);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    margin: 0 0 12px;
+    color: var(--text);
+  }
+
+  .home-header__subtitle {
+    font-size: clamp(15px, 2vw, 20px);
+    color: var(--text-muted);
+    margin: 0;
+    max-width: 640px;
   }
 }
 
-.search-result-table {
-  width: 100%;
+.search-region {
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px;
+}
 
-  tr:hover td {
-    background: #EEE;
-    cursor: pointer;
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px auto 24px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger);
+  color: var(--on-danger);
+  font-weight: 500;
+  max-width: 720px;
+}
+
+.results-loading,
+.detail-loading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  justify-content: center;
+  padding: 48px 0;
+  color: var(--text-muted);
+}
+
+.results {
+  padding: 24px 16px;
+  max-width: 1400px;
+
+  .results__summary {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  .results__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 20px;
+    justify-content: center;
+
+    @media (min-width: 1200px) {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+
+  .results__paginator {
+    margin-top: 24px;
+    background: var(--surface);
+    border-radius: 8px;
+    border: 1px solid var(--border);
   }
 }
 
-.movieInfo .close-btn {
-  display: block;
-  margin: auto;
+.empty-state {
+  text-align: center;
+  padding: 72px 24px;
+  color: var(--text-muted);
+
+  .material-icon {
+    font-size: 48px;
+  }
+
+  h2 {
+    margin: 16px 0 8px;
+    font-size: 22px;
+    color: var(--text);
+  }
+
+  p {
+    margin: 0;
+  }
 }
 
-app-omdb-movie-info {
-  margin-bottom: 15px;
+.movie-detail-layer {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 24px;
+  background: rgba(10, 12, 16, 0.68);
+  backdrop-filter: blur(6px);
 }

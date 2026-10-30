@@ -1,0 +1,135 @@
+.movie-detail {
+  display: grid;
+  grid-template-columns: minmax(280px, 380px) 1fr;
+  gap: 32px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.28);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.movie-detail__backdrop {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  background: var(--surface-alt);
+
+  .movie-detail__backdrop-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .movie-detail__backdrop-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(20, 24, 32, 0.35), rgba(20, 24, 32, 0.65));
+  }
+}
+
+.movie-detail__close {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+}
+
+.movie-detail__content {
+  padding: 28px 32px;
+  min-width: 0;
+
+  .movie-detail__title {
+    font-size: 28px;
+    margin: 0 0 8px;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .movie-detail__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 20px;
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+
+    .badge--rating {
+      color: var(--accent-contrast);
+      background: var(--accent);
+    }
+  }
+
+  .movie-detail__plot {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    margin: 0 0 24px;
+  }
+
+  .movie-detail__facts {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px 24px;
+    margin: 0;
+
+    dt {
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    dd {
+      margin: 0;
+      color: var(--text);
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .movie-detail__ratings {
+    margin-top: 24px;
+
+    h2 {
+      font-size: 17px;
+      font-weight: 600;
+      margin: 0 0 10px;
+      color: var(--text);
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      color: var(--text);
+    }
+  }
+}
+
+@media (max-width: 720px) {
+  .movie-detail {
+    grid-template-columns: 1fr;
+
+    .movie-detail__backdrop {
+      max-height: 320px;
+    }
+  }
+}

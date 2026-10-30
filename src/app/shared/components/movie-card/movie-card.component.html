@@ -1,0 +1,21 @@
+<article class="movie-card" (click)="selectMovie.emit(movie())" role="button" tabindex="0"
+  (keydown.enter)="selectMovie.emit(movie())">
+  <div class="movie-card__poster">
+    @if (movie().Poster) {
+      <img [src]="movie().Poster" [alt]="movie().Title" loading="lazy" />
+    } @else {
+      <div class="movie-card__placeholder">
+        <span class="material-symbols-outlined">movie</span>
+      </div>
+    }
+    <div class="movie-card__type">{{ movie().Type }}</div>
+  </div>
+  <div class="movie-card__body">
+    <h3 class="movie-card__title">{{ movie().Title }}</h3>
+    <p class="movie-card__meta">
+      @if (movie().Year) {
+        <span class="movie-card__year">{{ movie().Year }}</span>
+      }
+    </p>
+  </div>
+</article>

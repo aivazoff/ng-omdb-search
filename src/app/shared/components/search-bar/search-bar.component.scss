@@ -1,0 +1,11 @@
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 720px;
+}
+
+.search-field {
+  flex: 1;
+}

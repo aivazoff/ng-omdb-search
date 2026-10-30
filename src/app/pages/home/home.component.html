@@ -1,29 +1,67 @@
-<app-omdb-search (selection)="onSelect($event)" (clear)="onClear()" [value]="searchValue"></app-omdb-search>
+<header class="home-header">
+  <h1 class="home-header__title">Explore the world of cinema</h1>
+  <p class="home-header__subtitle">Search millions of movies, series and episodes from the OMDb database.</p>
+</header>
 
-<div [hidden]="hiddenTable" class="row justify-content-md-center">
-  <div class="col-lg-9">
-    <table mat-table [dataSource]="searchResult" class="search-result-table">
-      <ng-container *ngFor="let tableColum of tableColums" [matColumnDef]="tableColum.name">
-        <th mat-header-cell *matHeaderCellDef>{{ tableColum.name }}</th>
-        <td mat-cell *matCellDef="let item" [innerHTML]="tableColum.render(item)"></td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showInfo(row)"></tr>
-    </table>
-    <mat-paginator [length]="totalResults" [pageSize]="pageSize" showFirstLastButtons></mat-paginator>
+<section class="search-region" aria-label="Movie search">
+  <app-search-bar
+    [loading]="loading()"
+    (valueChange)="onSearch($event)"
+    (submitSearch)="onSearch($event)"
+    (clearSearch)="onClearSearch()" />
+</section>
+
+@if (error(); as errorMessage) {
+  <div class="error-banner" role="alert">
+    <mat-icon aria-hidden="true">error_outline</mat-icon>
+    <span>{{ errorMessage }}</span>
   </div>
-</div>
+}
 
-<ng-container *ngIf="movieInfo">
-  <div class="movieInfo">
-    <button mat-mini-fab color="warn" class="close-btn" (click)="closeInfo()">
-      <mat-icon>close</mat-icon>
-    </button>
-    <app-omdb-movie-info [movieInfo]="movieInfo"></app-omdb-movie-info>
-    <button mat-mini-fab color="warn" class="close-btn" (click)="closeInfo()">
-      <mat-icon>close</mat-icon>
-    </button>
+@if (loading()) {
+  <div class="results-loading" aria-live="polite">
+    <mat-spinner diameter="48"></mat-spinner>
+    <span>Searching…</span>
   </div>
-</ng-container>
+} @else if (movies(); as movies) {
+  @if (movies.length > 0) {
+    <section class="results" aria-label="Search results">
+      <div class="results__summary">
+        <span>
+          Found <strong>{{ totalResults() }}</strong> results for “<strong>{{ searchTerm() }}</strong>”
+        </span>
+        <span>Page {{ currentPage() }} of {{ totalPages() }}</span>
+      </div>
 
-<mat-spinner *ngIf="loading"></mat-spinner>
+      <div class="results__grid">
+        @for (movie of movies; track movie.imdbID) {
+          <app-movie-card [movie]="movie" (selectMovie)="showInfo($event)" />
+        }
+      </div>
+
+      <mat-paginator
+        class="results__paginator"
+        [length]="totalResults()"
+        [pageSize]="pageSize"
+        [pageIndex]="currentPage() - 1"
+        [hidePageSize]="true"
+        (page)="onChangePage($event.pageIndex + 1)" />
+    </section>
+  } @else if (searchTerm()) {
+    <div class="empty-state">
+      <mat-icon aria-hidden="true">search_off</mat-icon>
+      <h2>No results found</h2>
+      <p>Try a different title or broaden your search.</p>
+    </div>
+  }
+}
+
+@if (loadingDetail()) {
+  <div class="detail-loading">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+} @else {
+  @if (movieInfo(); as movie) {
+    <app-movie-detail class="movie-detail-layer" [movie]="movie" (closeDetail)="closeInfo()" />
+  }
+}

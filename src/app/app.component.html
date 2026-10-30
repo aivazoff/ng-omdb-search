@@ -1,7 +1,26 @@
-<mat-toolbar color="primary">
-  <h1>OMDb search</h1>
+<mat-toolbar class="app-toolbar" role="banner">
+  <a class="app-toolbar__brand" routerLink="/" aria-label="OMDb Search home">
+    <span class="app-toolbar__logo" aria-hidden="true">🎬</span>
+    <span class="app-toolbar__title">OMDb<span>Search</span></span>
+  </a>
+
+  <span class="app-toolbar__spacer"></span>
+
+  <button mat-icon-button class="app-toolbar__theme-toggle" (click)="toggleTheme()"
+    [attr.aria-label]="theme() === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'">
+    @if (theme() === 'dark') {
+      <mat-icon aria-hidden="true">light_mode</mat-icon>
+    } @else {
+      <mat-icon aria-hidden="true">dark_mode</mat-icon>
+    }
+  </button>
 </mat-toolbar>
 
-<div class="container py-5">
-  <router-outlet></router-outlet>
-</div>
+<main class="app-main">
+  <router-outlet />
+</main>
+
+<footer class="app-footer">
+  <span>Data © <a href="https://www.omdbapi.com" target="_blank" rel="noopener noreferrer">OMDb API</a></span>
+  <span>Powered by Angular 22</span>
+</footer>

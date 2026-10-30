@@ -1,0 +1,21 @@
+<form class="search-bar" (ngSubmit)="onSearch()">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-icon matPrefix aria-hidden="false" aria-label="Search icon">search</mat-icon>
+    <input
+      matInput
+      [(ngModel)]="term"
+      name="term"
+      [placeholder]="placeholder()"
+      type="search"
+      autocomplete="off"
+      (ngModelChange)="onInput($event)" />
+    @if (loading()) {
+      <mat-spinner matSuffix diameter="20"></mat-spinner>
+    } @else if (term) {
+      <button mat-icon-button matSuffix type="button" aria-label="Clear search" (click)="onClear()">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+  <button mat-flat-button color="primary" type="submit">Search</button>
+</form>
