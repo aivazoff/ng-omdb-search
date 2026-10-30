@@ -1,22 +1,128 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
 
-@import "~bootstrap-scss/functions";
-@import "~bootstrap-scss/variables";
-@import "~bootstrap-scss/mixins";
-@import "~bootstrap-scss/reboot";
-@import "~bootstrap-scss/type";
-@import "~bootstrap-scss/images";
-@import "~bootstrap-scss/grid";
-@import "~bootstrap-scss/card";
-@import "~bootstrap-scss/utilities";
+@include mat.core();
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$red-palette,
+      tertiary: mat.$red-palette,
+    ),
+  )
+);
 
-button:focus {
-   outline: none;
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$red-palette,
+      tertiary: mat.$red-palette,
+    ),
+  )
+);
+
+html {
+  @include mat.all-component-themes($light-theme);
+
+  &[data-theme='dark'] {
+    @include mat.all-component-themes($dark-theme);
+  }
 }
 
-.mat-form-field {
-  width: 100%;
+:root {
+  color-scheme: light;
+
+  --font-display: 'Poppins', 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --primary: #b01e2e;
+  --primary-contrast: #ffffff;
+  --accent: #d9a441;
+  --accent-contrast: #1a1a1a;
+
+  --bg: #f6f5f3;
+  --surface: #ffffff;
+  --surface-alt: #f0efec;
+  --toolbar-bg: rgba(255, 255, 255, 0.9);
+  --text: #1a1d23;
+  --text-muted: #6b6e76;
+  --border: #e3e1dd;
+
+  --danger: #d32f2f;
+  --danger-bg: #feecec;
+  --on-danger: #8e1a1a;
+
+  --shadow-sm: 0 1px 3px rgba(20, 24, 32, 0.08);
+  --shadow-lg: 0 16px 40px rgba(20, 24, 32, 0.2);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --primary: #e5484d;
+  --primary-contrast: #ffffff;
+  --accent: #e6b64c;
+  --accent-contrast: #121212;
+
+  --bg: #0d1015;
+  --surface: #161b22;
+  --surface-alt: #1d242e;
+  --toolbar-bg: rgba(13, 16, 21, 0.85);
+  --text: #e9eaee;
+  --text-muted: #8b919c;
+  --border: #2b333e;
+
+  --danger: #ff6b6b;
+  --danger-bg: #2a1418;
+  --on-danger: #ffb4b4;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+a {
+  color: var(--primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+button:focus {
+  outline: none;
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
 }
