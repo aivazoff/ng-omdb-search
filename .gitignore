@@ -1,11 +1,7 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
-
 # compiled output
 /dist
 /tmp
 /out-tsc
-# Only exists if Bazel was run
-/bazel-out
 
 # dependencies
 /node_modules
@@ -31,6 +27,9 @@ speed-measure-plugin*.json
 !.vscode/extensions.json
 .history/*
 
+# Angular cache
+/.angular
+
 # misc
 /.sass-cache
 /connect.lock
@@ -44,4 +43,10 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Firebase
 .firebase
+firebase-debug.log
+
+# ESLint cache
+.eslintcache
