@@ -1,13 +1,14 @@
 @if (movie(); as movie) {
   <section class="movie-detail" role="dialog" aria-modal="true" aria-label="Movie details" tabindex="-1">
+    <button class="movie-detail__close" mat-icon-button aria-label="Close details" (click)="closeDetail.emit()">
+      <mat-icon>close</mat-icon>
+    </button>
+
     <div class="movie-detail__backdrop">
       @if (movie.Poster) {
         <img class="movie-detail__backdrop-image" [src]="movie.Poster" [alt]="movie.Title" />
       }
       <div class="movie-detail__backdrop-overlay"></div>
-      <button class="movie-detail__close" mat-icon-button aria-label="Close details" (click)="closeDetail.emit()">
-        <mat-icon>close</mat-icon>
-      </button>
     </div>
 
     <div class="movie-detail__content">

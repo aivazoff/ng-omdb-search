@@ -59,6 +59,9 @@ html {
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
+
+  --movie-detail__box-shadow: 0 24px 56px rgba(0, 0, 0, 0.28);
+  --movie-detail__close_btn__bg: rgba(0, 0, 0, 0.35);
 }
 
 :root[data-theme='dark'] {
@@ -83,6 +86,9 @@ html {
 
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+
+  --movie-detail__box-shadow: 0 10px 55px rgba(white, 0.25);
+  --movie-detail__close_btn__bg: rgba(255, 255, 255, 0.25);
 }
 
 * {
@@ -96,7 +102,7 @@ body {
 
 body {
   margin: 0;
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   background: var(--bg);
   color: var(--text);
   transition: background-color 0.25s ease, color 0.25s ease;
@@ -107,7 +113,7 @@ a {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
+  font-family: var(--font-display), sans-serif;
 }
 
 button:focus {
@@ -115,7 +121,7 @@ button:focus {
 }
 
 .material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
+  font-family: 'Material Symbols Outlined', sans-serif;
   font-weight: normal;
   font-style: normal;
   display: inline-block;

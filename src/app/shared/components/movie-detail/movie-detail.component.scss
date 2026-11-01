@@ -6,9 +6,10 @@
   overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--border);
-  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.28);
+  box-shadow: var(--movie-detail__box-shadow);
   max-height: 90vh;
   overflow-y: auto;
+  position: relative;
 }
 
 .movie-detail__backdrop {
@@ -31,11 +32,11 @@
 }
 
 .movie-detail__close {
-  position: fixed;
+  position: absolute;
   top: 16px;
   right: 16px;
   z-index: 10;
-  background: rgba(0, 0, 0, 0.55);
+  background: var(--movie-detail__close_btn__bg);
   color: #fff;
 }
 

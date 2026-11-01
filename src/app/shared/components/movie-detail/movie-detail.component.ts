@@ -11,6 +11,9 @@ const NAVIGATION_BLACKLIST = ['N/A', '', null, undefined];
   imports: [MatButtonModule, MatIconModule],
   templateUrl: './movie-detail.component.html',
   styleUrls: ['./movie-detail.component.scss'],
+  host: {
+    '(window:keydown.escape)': 'onEscape()',
+  },
 })
 export class MovieDetailComponent {
   readonly movie = input<MovieInfo>();
@@ -47,5 +50,9 @@ export class MovieDetailComponent {
 
   ratings(movie: MovieInfo): MovieRating[] {
     return movie?.Ratings ?? [];
+  }
+
+  onEscape(): void {
+    this.closeDetail.emit()
   }
 }
