@@ -4,6 +4,8 @@ import { provideRouter, withViewTransitions } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { environment } from '../environments/environment';
 import { OMDB_OPTIONS } from './core/omdb-options';
+import {IStorage} from "./core/ports/storage.abstract";
+import {CacheService} from "./core/services/cache.service";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,5 +30,9 @@ export const appConfig: ApplicationConfig = {
       provide: OMDB_OPTIONS,
       useValue: { apiKey: environment.omdbApiKey, baseUrl: environment.omdbBaseUrl },
     },
+    {
+      provide: IStorage,
+      useClass: CacheService,
+    }
   ],
 };

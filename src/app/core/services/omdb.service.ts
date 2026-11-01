@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-import { DEFAULT_OMDB_OPTIONS, OMDB_OPTIONS, OmdbOptions } from '../omdb-options';
-import { MovieInfo, OmdbSearchResponse, SearchResultItem } from '../models/movie';
-import { CacheService } from './cache.service';
+import {HttpClient} from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
+import {Observable, of, throwError} from 'rxjs';
+import {catchError, map, tap} from 'rxjs/operators';
+import {DEFAULT_OMDB_OPTIONS, OMDB_OPTIONS, OmdbOptions} from '../omdb-options';
+import {MovieInfo, OmdbSearchResponse, SearchResultItem} from '../models/movie';
+import {IStorage} from "../ports/storage.abstract";
 
 export interface SearchResult {
   Search: SearchResultItem[];
@@ -14,7 +14,7 @@ export interface SearchResult {
 @Injectable({ providedIn: 'root' })
 export class OmdbService {
   private readonly http = inject(HttpClient);
-  private readonly cache = inject(CacheService);
+  private readonly cache = inject(IStorage);
   private readonly options: OmdbOptions = inject(OMDB_OPTIONS, { optional: true }) ?? DEFAULT_OMDB_OPTIONS;
 
   search(term: string, page = 1): Observable<SearchResult> {

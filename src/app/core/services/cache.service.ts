@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+import {IStorage} from "../ports/storage.abstract";
 
 @Injectable({ providedIn: 'root' })
-export class CacheService {
+export class CacheService implements IStorage {
   private readonly storage: Storage;
 
   constructor() {
