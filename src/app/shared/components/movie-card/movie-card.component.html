@@ -1,4 +1,8 @@
-<article class="movie-card" (click)="selectMovie.emit(movie())" role="button" tabindex="0"
+<article
+  class="movie-card"
+  (click)="selectMovie.emit(movie())"
+  role="button"
+  tabindex="0"
   (keydown.enter)="selectMovie.emit(movie())">
   <div class="movie-card__poster">
     @if (movie().Poster) {

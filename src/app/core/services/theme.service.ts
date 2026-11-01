@@ -27,7 +27,8 @@ export class ThemeService {
   }
 
   private readInitialTheme(): Theme {
-    const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
+    const stored = window.localStorage.getItem(THEME_STORAGE_KEY) || 'light';
+
     if (stored === 'light' || stored === 'dark') {
       return stored;
     }
